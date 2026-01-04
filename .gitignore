@@ -5,3 +5,5 @@ $RECYCLE.BIN/
 .DS_Store
 .vscode
 coverage/
+
+ai-summary/
