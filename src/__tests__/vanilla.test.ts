@@ -257,7 +257,7 @@ describe("Dispatch - Error handling", () => {
     );
   });
 
-  it.only("should NOT throw error for valid event", () => {
+  it("should NOT throw error for valid event", () => {
     const counter = new Dispatch({
       initialState: { count: 0 },
       events: {
