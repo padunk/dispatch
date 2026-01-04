@@ -1,0 +1,28 @@
+# Source files
+src/
+docs/
+examples/
+
+# Config files
+.git/
+.gitignore
+.nvmrc
+tsconfig.json
+rolldown.config.js
+prettierrc.json
+AGENTS.md
+
+# Development files
+node_modules/
+.vscode/
+*.log
+*.tsbuildinfo
+
+# Test files
+**/__tests__/
+*.test.ts
+*.test.js
+
+# Build artifacts
+bun.lock
+index.js

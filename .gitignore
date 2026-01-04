@@ -1,0 +1,7 @@
+node_modules/
+dist/
+
+$RECYCLE.BIN/
+.DS_Store
+.vscode
+coverage/
