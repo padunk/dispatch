@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { produce, Draft } from "immer";
+import { Draft } from "immer";
 import { Dispatch } from "./index";
 
 // Support both return-style and draft-style updates
@@ -31,7 +31,7 @@ type DispatchEvents<D> = Record<string, StateUpdater<D, any>>;
  */
 export function createDispatch<
   Data,
-  Events extends DispatchEvents<Data>
+  Events extends DispatchEvents<Data>,
 >(config: {
   initialState: Data;
   events: Events;
@@ -113,7 +113,7 @@ export function createDispatch<
 export function createValidatedDispatch<
   Data extends z.infer<Schema>,
   Schema extends z.ZodSchema,
-  Events extends DispatchEvents<Data>
+  Events extends DispatchEvents<Data>,
 >(config: {
   schema: Schema;
   initialState: Data;

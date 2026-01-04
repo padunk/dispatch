@@ -197,6 +197,66 @@ dispatch.resetState();
 
 ## 💡 Patterns
 
+### React Integration
+
+Dispatch integrates seamlessly with React:
+
+```typescript
+import { createDispatch, useDispatch, useSelector, useMachine } from "dispatch";
+
+const counter = createDispatch({
+  initialState: { count: 0 },
+  events: {
+    increment: (state) => ({ count: state.count + 1 }),
+    decrement: (state) => ({ count: state.count - 1 }),
+  },
+  validNextEvents: {
+    increment: ["increment", "decrement"],
+    decrement: ["increment", "decrement"],
+  },
+});
+
+// Option 1: Subscribe to full state
+function Counter() {
+  const state = useDispatch(counter);
+
+  return (
+    <div>
+      <p>Count: {state.count}</p>
+      <button onClick={() => counter.dispatch("increment")}>+</button>
+      <button onClick={() => counter.dispatch("decrement")}>-</button>
+    </div>
+  );
+}
+
+// Option 2: Select derived values
+function DoubleCounter() {
+  const double = useSelector(counter, (state) => state.count * 2);
+  return <p>Double: {double}</p>;
+}
+
+// Option 3: Full machine API
+function FullCounter() {
+  const [state, dispatch, machine] = useMachine(counter);
+
+  return (
+    <div>
+      <p>Count: {state.count}</p>
+      <button onClick={() => dispatch("increment")}>+</button>
+      <p>Valid: {machine.getValidNextEvents().join(", ")}</p>
+    </div>
+  );
+}
+```
+
+#### React Hooks API
+
+- **`useDispatch(machine)`** - Subscribe to full state
+- **`useSelector(machine, selector)`** - Subscribe to derived value
+- **`useCurrentEvent(machine)`** - Get current event name
+- **`useValidNextEvents(machine)`** - Get valid next events
+- **`useMachine(machine)`** - Returns `[state, dispatch, machine]` tuple
+
 ### Draft-Style Updates (Immer)
 
 Mutate drafts directly for complex updates:

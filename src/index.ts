@@ -4,5 +4,11 @@ export { createDispatch, createValidatedDispatch } from "./vanilla/builder";
 // Types
 export type { Dispatch } from "./vanilla";
 
-// React hooks (coming soon)
-// export * from "./react";
+// React hooks
+export {
+  useDispatch,
+  useSelector,
+  useCurrentEvent,
+  useValidNextEvents,
+  useMachine,
+} from "./react";

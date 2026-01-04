@@ -38,7 +38,11 @@
     "build:rolldown": "rolldown -c",
     "build:types": "tsc --emitDeclarationOnly",
     "build:base": "rolldown -c",
-    "test": "vitest",
+    "test": "bun run \"/^test:.*/\"",
+    "test:format": "prettier . --list-different",
+    "test:types": "tsc --noEmit",
+    "test:lint": "eslint .",
+    "test:spec": "vitest run",
     "prepublishOnly": "npm run build && npm test"
   },
   "repository": {
@@ -78,6 +82,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
+    "@types/jsdom": "^27.0.0",
     "@types/react": "^19.2.7",
     "@types/use-sync-external-store": "^1.5.0",
     "@vitest/coverage-v8": "^4.0.16",
@@ -89,6 +94,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-testing-library": "^7.15.4",
+    "jsdom": "^27.4.0",
     "prettier": "^3.7.4",
     "react": "^19.2.3",
     "rolldown": "^1.0.0-beta.58",
