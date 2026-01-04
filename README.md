@@ -7,7 +7,6 @@ A lightweight, **type-safe** state machine library for TypeScript. Get autocompl
 - 🔒 **Fully Type-Safe**: With Zod schema
 - 🎯 **IDE Autocomplete**: Your editor suggests valid event names
 - ✅ **Runtime Validation**: Catches invalid transitions and event references
-- 📦 **Optional Zod Integration**: Validate state shape at runtime
 - 🔄 **Immutable Updates**: Powered by Immer for clean state updates
 - 🪝 **Simple API**: Easy to learn, powerful to use
 - 🎨 **Flexible Patterns**: Support for both return-style and draft-style updates
@@ -15,9 +14,9 @@ A lightweight, **type-safe** state machine library for TypeScript. Get autocompl
 ## 📦 Installation
 
 ```bash
-npm install dispatch zod
+npm install dispatch
 # or
-bun add dispatch zod
+bun add dispatch
 ```
 
 ## 🚀 Quick Start
@@ -33,8 +32,6 @@ const counter = createDispatch({
     reset: () => ({ count: 0 }),
   },
   validNextEvents: {
-    // ✅ TypeScript autocompletes these!
-    // ✅ Only accepts: "increment", "decrement", "reset"
     increment: ["increment", "decrement", "reset"],
     decrement: ["increment", "decrement", "reset"],
     reset: ["increment"],
@@ -87,7 +84,7 @@ const machine = createDispatch({
     [eventName]: (state: Data, payload?: any) => Partial<Data> | void
   },
   validNextEvents: {
-    [eventName]: string[] // ✅ Type-safe event names!
+    [eventName]: string[]
   },
   schema?: z.ZodSchema<Data> // Optional Zod schema
 });
@@ -112,52 +109,6 @@ const unsubscribe = machine.subscribe((state) => {
 });
 
 unsubscribe(); // Stop listening
-```
-
-### Other Methods
-
-```typescript
-machine.getState(); // Get current state
-machine.getCurrentEvent(); // Get last dispatched event
-machine.getValidNextEvents(); // Get allowed next events
-machine.resetState(); // Reset to initial state
-```
-
-## 🛡️ Zod Schema Validation
-
-Validate your state shape at runtime:
-
-```typescript
-import { z } from "zod";
-import { createValidatedDispatch } from "dispatch";
-
-const UserSchema = z.object({
-  name: z.string().min(1),
-  age: z.number().min(0).max(150),
-  email: z.string().email(),
-});
-
-type User = z.infer<typeof UserSchema>;
-
-const user = createValidatedDispatch({
-  schema: UserSchema,
-  initialState: {
-    name: "John",
-    age: 30,
-    email: "john@example.com",
-  } as User,
-  events: {
-    updateName: (state: User, name: string) => ({ name }),
-    updateAge: (state: User, age: number) => ({ age }),
-  },
-  validNextEvents: {
-    updateName: ["updateAge"],
-    updateAge: ["updateName"],
-  },
-});
-
-// ✅ Initial state is validated against schema
-// ❌ Invalid state throws detailed error
 ```
 
 #### `getState(): State`
@@ -193,6 +144,65 @@ Reset the state back to the initial state and clear the current event.
 
 ```typescript
 dispatch.resetState();
+```
+
+## 🛡️ Zod Schema Validation
+
+Validate your state shape at runtime:
+
+```typescript
+import { z } from "zod";
+import { createValidatedDispatch } from "dispatch";
+
+const UserSchema = z.object({
+  name: z.string().min(1),
+  age: z.number().min(0).max(150),
+  email: z.string().email(),
+});
+
+type User = z.infer<typeof UserSchema>;
+
+const user = createValidatedDispatch({
+  schema: UserSchema,
+  initialState: {
+    name: "John",
+    age: 30,
+    email: "john@example.com",
+  } as User,
+  events: {
+    updateName: (state: User, name: string) => ({ name }),
+    updateAge: (state: User, age: number) => ({ age }),
+  },
+  validNextEvents: {
+    updateName: ["updateAge"],
+    updateAge: ["updateName"],
+  },
+});
+```
+
+### Draft-Style Updates (Immer)
+
+Mutate drafts directly for complex updates:
+
+```typescript
+const todos = createDispatch({
+  initialState: {
+    items: [] as Array<{ id: number; text: string; done: boolean }>,
+  },
+  events: {
+    addTodo: (draft, text: string) => {
+      draft.items.push({ id: Date.now(), text, done: false });
+    },
+    toggleTodo: (draft, id: number) => {
+      const todo = draft.items.find((t) => t.id === id);
+      if (todo) todo.done = !todo.done;
+    },
+  },
+  validNextEvents: {
+    addTodo: ["addTodo", "toggleTodo"],
+    toggleTodo: ["addTodo", "toggleTodo"],
+  },
+});
 ```
 
 ## 💡 Patterns
@@ -257,59 +267,6 @@ function FullCounter() {
 - **`useValidNextEvents(machine)`** - Get valid next events
 - **`useMachine(machine)`** - Returns `[state, dispatch, machine]` tuple
 
-### Draft-Style Updates (Immer)
-
-Mutate drafts directly for complex updates:
-
-```typescript
-const todos = createDispatch({
-  initialState: {
-    items: [] as Array<{ id: number; text: string; done: boolean }>,
-  },
-  events: {
-    addTodo: (draft, text: string) => {
-      draft.items.push({ id: Date.now(), text, done: false });
-    },
-    toggleTodo: (draft, id: number) => {
-      const todo = draft.items.find((t) => t.id === id);
-      if (todo) todo.done = !todo.done;
-    },
-  },
-  validNextEvents: {
-    addTodo: ["addTodo", "toggleTodo"],
-    toggleTodo: ["addTodo", "toggleTodo"],
-  },
-});
-```
-
-### Authentication Flow
-
-```typescript
-type AuthState = {
-  status: "idle" | "loading" | "authenticated" | "error";
-  user: string | null;
-};
-
-const auth = createDispatch({
-  initialState: { status: "idle", user: null } as AuthState,
-  events: {
-    login: (state: AuthState) => ({ status: "loading" as const }),
-    success: (state: AuthState, user: string) => ({
-      status: "authenticated" as const,
-      user,
-    }),
-    error: (state: AuthState) => ({ status: "error" as const }),
-    logout: () => ({ status: "idle" as const, user: null }),
-  },
-  validNextEvents: {
-    login: ["success", "error"],
-    success: ["logout"],
-    error: ["login"],
-    logout: ["login"],
-  },
-});
-```
-
 ## ⚠️ Error Handling
 
 ### Invalid Event
@@ -317,32 +274,6 @@ const auth = createDispatch({
 ```typescript
 machine.dispatch("nonexistent");
 // ❌ Error: Event "nonexistent" does not exist
-```
-
-### Invalid Transition
-
-```typescript
-const machine = createDispatch({
-  events: { a: () => ({}), b: () => ({}) },
-  validNextEvents: { a: ["a"] }, // b not allowed after a
-});
-
-machine.dispatch("a");
-machine.dispatch("b"); // ❌ Error: Cannot transition from "a" to "b"
-```
-
-### Schema Validation
-
-```typescript
-const Schema = z.object({ count: z.number().min(0) });
-
-createValidatedDispatch({
-  schema: Schema,
-  initialState: { count: -1 }, // ❌ Error with details:
-  // "Initial state validation failed: [
-  //   { path: ['count'], message: 'Too small: expected >=0' }
-  // ]"
-});
 ```
 
 ## 🆚 Why Not XState?
