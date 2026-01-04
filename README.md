@@ -1,49 +1,43 @@
-# Dispatch - Lite XState Alternative
+# Dispatch - Type-Safe State Machines
 
-A lightweight TypeScript state machine library inspired by XState. Provides predictable state management with event-driven transitions and validation.
+A lightweight, **type-safe** state machine library for TypeScript. Get autocomplete for events, runtime validation, and optional Zod schema validation.
 
-## Features
+## ✨ Features
 
-- ✅ **Type-safe**: Full TypeScript support with generic types
-- ✅ **Event validation**: Ensures only valid state transitions occur
-- ✅ **State tracking**: Track current event and available next events
-- ✅ **Subscriptions**: Subscribe to state changes
-- ✅ **Immutable updates**: State is never mutated directly
-- ✅ **Simple API**: Easy to learn and use
+- 🔒 **Fully Type-Safe**: With Zod schema
+- 🎯 **IDE Autocomplete**: Your editor suggests valid event names
+- ✅ **Runtime Validation**: Catches invalid transitions and event references
+- 📦 **Optional Zod Integration**: Validate state shape at runtime
+- 🔄 **Immutable Updates**: Powered by Immer for clean state updates
+- 🪝 **Simple API**: Easy to learn, powerful to use
+- 🎨 **Flexible Patterns**: Support for both return-style and draft-style updates
 
-## How It Works
-
-The key insight is that **you don't call event functions directly**. Instead:
-
-1. **Define events as state updater functions** - They receive current state and return partial updates
-2. **Use the `send()` method** - This allows the library to intercept, validate, and track the event
-3. **Track the current event** - The library remembers which event was last triggered
-4. **Validate transitions** - Check if the next event is allowed based on `validNextEvents`
-
-## Installation
+## 📦 Installation
 
 ```bash
-npm install dispatch
+npm install dispatch zod
+# or
+bun add dispatch zod
 ```
 
-## Basic Usage
+## 🚀 Quick Start
 
 ```typescript
-import Dispatch from "@rusty-rush/Dispatch";
+import { createDispatch } from "dispatch";
 
-const counter = new Dispatch({
-  initialState: {
-    count: 0,
-  },
+const counter = createDispatch({
+  initialState: { count: 0 },
   events: {
-    // Events return partial state updates
-    increment: (state) => ({ count: state.count + 1 }),
-    decrement: (state) => ({ count: state.count - 1 }),
+    increment: (state: { count: number }) => ({ count: state.count + 1 }),
+    decrement: (state: { count: number }) => ({ count: state.count - 1 }),
+    reset: () => ({ count: 0 }),
   },
   validNextEvents: {
-    // Define which events can follow each event
-    increment: ["increment", "decrement"],
-    decrement: ["decrement", "increment"],
+    // ✅ TypeScript autocompletes these!
+    // ✅ Only accepts: "increment", "decrement", "reset"
+    increment: ["increment", "decrement", "reset"],
+    decrement: ["increment", "decrement", "reset"],
+    reset: ["increment"],
   },
 });
 
@@ -52,50 +46,118 @@ counter.subscribe((state) => {
   console.log("Count:", state.count);
 });
 
-// Send events using the send() method
-counter.send("increment"); // count = 1
-counter.send("increment"); // count = 2
-counter.send("decrement"); // count = 1
+// Dispatch events
+counter.dispatch("increment"); // ✅ count = 1
+counter.dispatch("increment"); // ✅ count = 2
+counter.dispatch("decrement"); // ✅ count = 1
 ```
 
-## API Reference
+## 🎯 Type Safety in Action
 
-### Constructor
+### Autocomplete & Validation
 
 ```typescript
-new Dispatch<State>({
-  initialState: State,
-  events: Record<string, (state: State) => Partial<State>>,
-  validNextEvents: Record<string, string[]>,
+validNextEvents: {
+  increment: ["dec"], // ❌ TypeScript error!
+  //          ^^^^^
+  // Type '"dec"' is not assignable to type '"increment" | "decrement" | "reset"'
+}
+```
+
+### Runtime Safety
+
+```typescript
+try {
+  counter.dispatch("invalidEvent"); // ❌ Runtime error
+} catch (error) {
+  // Error: Event "invalidEvent" does not exist
+}
+```
+
+## 📚 API Reference
+
+### `createDispatch(config)`
+
+Create a type-safe state machine.
+
+```typescript
+const machine = createDispatch({
+  initialState: Data,
+  events: {
+    [eventName]: (state: Data, payload?: any) => Partial<Data> | void
+  },
+  validNextEvents: {
+    [eventName]: string[] // ✅ Type-safe event names!
+  },
+  schema?: z.ZodSchema<Data> // Optional Zod schema
 });
 ```
 
-### Methods
+### `dispatch(eventName, payload?)`
 
-#### `send(eventName: string): void`
-
-Dispatch an event to trigger a state transition.
-
-- Validates the event exists
-- Checks if the transition is allowed
-- Updates the state
-- Notifies all subscribers
+Trigger a state transition.
 
 ```typescript
-dispatch.send("increment");
+machine.dispatch("increment");
+machine.dispatch("setValue", { value: 42 });
 ```
 
-#### `subscribe(listener: (state: State) => void): () => void`
+### `subscribe(listener)`
 
-Subscribe to state changes. Returns an unsubscribe function.
+Listen to state changes. Returns unsubscribe function.
 
 ```typescript
-const unsubscribe = dispatch.subscribe((state) => {
+const unsubscribe = machine.subscribe((state) => {
   console.log(state);
 });
 
-// Later...
-unsubscribe();
+unsubscribe(); // Stop listening
+```
+
+### Other Methods
+
+```typescript
+machine.getState(); // Get current state
+machine.getCurrentEvent(); // Get last dispatched event
+machine.getValidNextEvents(); // Get allowed next events
+machine.resetState(); // Reset to initial state
+```
+
+## 🛡️ Zod Schema Validation
+
+Validate your state shape at runtime:
+
+```typescript
+import { z } from "zod";
+import { createValidatedDispatch } from "dispatch";
+
+const UserSchema = z.object({
+  name: z.string().min(1),
+  age: z.number().min(0).max(150),
+  email: z.string().email(),
+});
+
+type User = z.infer<typeof UserSchema>;
+
+const user = createValidatedDispatch({
+  schema: UserSchema,
+  initialState: {
+    name: "John",
+    age: 30,
+    email: "john@example.com",
+  } as User,
+  events: {
+    updateName: (state: User, name: string) => ({ name }),
+    updateAge: (state: User, age: number) => ({ age }),
+  },
+  validNextEvents: {
+    updateName: ["updateAge"],
+    updateAge: ["updateName"],
+  },
+});
+
+// ✅ Initial state is validated against schema
+// ❌ Invalid state throws detailed error
 ```
 
 #### `getState(): State`
@@ -133,7 +195,32 @@ Reset the state back to the initial state and clear the current event.
 dispatch.resetState();
 ```
 
-## Advanced Examples
+## 💡 Patterns
+
+### Draft-Style Updates (Immer)
+
+Mutate drafts directly for complex updates:
+
+```typescript
+const todos = createDispatch({
+  initialState: {
+    items: [] as Array<{ id: number; text: string; done: boolean }>,
+  },
+  events: {
+    addTodo: (draft, text: string) => {
+      draft.items.push({ id: Date.now(), text, done: false });
+    },
+    toggleTodo: (draft, id: number) => {
+      const todo = draft.items.find((t) => t.id === id);
+      if (todo) todo.done = !todo.done;
+    },
+  },
+  validNextEvents: {
+    addTodo: ["addTodo", "toggleTodo"],
+    toggleTodo: ["addTodo", "toggleTodo"],
+  },
+});
+```
 
 ### Authentication Flow
 
@@ -141,105 +228,82 @@ dispatch.resetState();
 type AuthState = {
   status: "idle" | "loading" | "authenticated" | "error";
   user: string | null;
-  error: string | null;
 };
 
-const authMachine = new Dispatch<AuthState>({
-  initialState: {
-    status: "idle",
-    user: null,
-    error: null,
-  },
+const auth = createDispatch({
+  initialState: { status: "idle", user: null } as AuthState,
   events: {
-    login: (state) => ({ status: "loading", error: null }),
-    loginSuccess: (state) => ({
-      status: "authenticated",
-      user: "john@example.com",
+    login: (state: AuthState) => ({ status: "loading" as const }),
+    success: (state: AuthState, user: string) => ({
+      status: "authenticated" as const,
+      user,
     }),
-    loginError: (state) => ({
-      status: "error",
-      error: "Invalid credentials",
-    }),
-    logout: (state) => ({
-      status: "idle",
-      user: null,
-      error: null,
-    }),
+    error: (state: AuthState) => ({ status: "error" as const }),
+    logout: () => ({ status: "idle" as const, user: null }),
   },
   validNextEvents: {
-    login: ["loginSuccess", "loginError"],
-    loginSuccess: ["logout"],
-    loginError: ["login"],
+    login: ["success", "error"],
+    success: ["logout"],
+    error: ["login"],
     logout: ["login"],
   },
 });
-
-authMachine.send("login");
-authMachine.send("loginSuccess");
-console.log(authMachine.getValidNextEvents()); // ["logout"]
 ```
 
-### Traffic Light
+## ⚠️ Error Handling
+
+### Invalid Event
 
 ```typescript
-const trafficLight = new Dispatch({
-  initialState: {
-    color: "red",
-    timer: 30,
-  },
-  events: {
-    toGreen: (state) => ({ color: "green", timer: 30 }),
-    toYellow: (state) => ({ color: "yellow", timer: 5 }),
-    toRed: (state) => ({ color: "red", timer: 30 }),
-  },
-  validNextEvents: {
-    toRed: ["toGreen"],
-    toGreen: ["toYellow"],
-    toYellow: ["toRed"],
-  },
+machine.dispatch("nonexistent");
+// ❌ Error: Event "nonexistent" does not exist
+```
+
+### Invalid Transition
+
+```typescript
+const machine = createDispatch({
+  events: { a: () => ({}), b: () => ({}) },
+  validNextEvents: { a: ["a"] }, // b not allowed after a
 });
 
-trafficLight.send("toGreen");
-trafficLight.send("toYellow");
-trafficLight.send("toRed");
+machine.dispatch("a");
+machine.dispatch("b"); // ❌ Error: Cannot transition from "a" to "b"
 ```
 
-## Error Handling
-
-The library throws errors for invalid operations:
+### Schema Validation
 
 ```typescript
-// Invalid event name
-try {
-  dispatch.send("invalidEvent");
-} catch (error) {
-  console.error(error.message);
-  // "Event "invalidEvent" does not exist"
-}
+const Schema = z.object({ count: z.number().min(0) });
 
-// Invalid transition
-try {
-  dispatch.send("increment");
-  dispatch.send("reset"); // Not in validNextEvents
-} catch (error) {
-  console.error(error.message);
-  // "Cannot transition from "increment" to "reset". Valid next events: increment, decrement"
-}
+createValidatedDispatch({
+  schema: Schema,
+  initialState: { count: -1 }, // ❌ Error with details:
+  // "Initial state validation failed: [
+  //   { path: ['count'], message: 'Too small: expected >=0' }
+  // ]"
+});
 ```
 
-## Comparison with XState
+## 🆚 Why Not XState?
 
-| Feature             | Dispatch | XState  |
-| ------------------- | -------- | ------- |
-| Learning Curve      | Simple   | Steeper |
-| State Machines      | ✅       | ✅      |
-| Hierarchical States | ❌       | ✅      |
-| Parallel States     | ❌       | ✅      |
-| State Charts        | ❌       | ✅      |
-| Actors              | ❌       | ✅      |
-| TypeScript          | ✅       | ✅      |
+| Feature             | Dispatch    | XState     |
+| ------------------- | ----------- | ---------- |
+| **Bundle Size**     | ~5KB        | ~20KB      |
+| **Learning Curve**  | Simple      | Steeper    |
+| **Type Safety**     | ✅ Built-in | ⚠️ Complex |
+| **Zod Integration** | ✅ Native   | ❌         |
+| **State Machines**  | ✅          | ✅         |
+| **Hierarchical**    | ❌          | ✅         |
+| **Parallel States** | ❌          | ✅         |
+| **Actors**          | ❌          | ✅         |
 
-Use **Dispatch** for simple state machines. Use **XState** for complex state charts with hierarchical/parallel states.
+**Choose Dispatch** for simple, type-safe state machines with great DX.  
+**Choose XState** for complex hierarchical/parallel state charts.
+
+## 📖 Learn More
+
+- [Examples](./examples/) - Real-world usage examples
 
 ## License
 

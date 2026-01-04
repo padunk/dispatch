@@ -1,6 +1,6 @@
-import { Dispatch } from "../src";
+import { createDispatch } from "../src";
 
-const dispatch = new Dispatch({
+const dispatch = createDispatch({
   initialState: {
     count: 1,
   },

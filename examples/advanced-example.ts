@@ -1,4 +1,4 @@
-import { Dispatch } from "../src";
+import { createDispatch } from "../src";
 
 // Example: User Authentication Flow
 console.log("=== Example : Authentication Flow ===\n");
@@ -9,12 +9,12 @@ type AuthState = {
   error: string | null;
 };
 
-const authMachine = new Dispatch<AuthState>({
+const authMachine = createDispatch({
   initialState: {
     status: "idle",
     user: null,
     error: null,
-  },
+  } as AuthState,
   events: {
     login: (state: AuthState) => ({
       status: "loading" as const,
@@ -72,11 +72,11 @@ type TrafficLightState = {
   timer: number;
 };
 
-const trafficLight = new Dispatch<TrafficLightState>({
+const trafficLight = createDispatch({
   initialState: {
     color: "red",
     timer: 0,
-  },
+  } as TrafficLightState,
   events: {
     toGreen: (state: TrafficLightState) => ({
       color: "green" as const,
