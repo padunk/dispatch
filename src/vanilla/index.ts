@@ -1,11 +1,11 @@
 import { produce, Draft } from "immer";
 
 // Support both return-style and draft-style updates
-type StateUpdater<D, P = void> = P extends void
+export type StateUpdater<D, P = void> = P extends void
   ? (state: D) => Partial<D> | void | ((draft: Draft<D>) => void)
   : (state: D, payload: P) => Partial<D> | void | ((draft: Draft<D>) => void);
 
-type DispatchEvents<D> = Record<string, StateUpdater<D, any>>;
+export type DispatchEvents<D> = Record<string, StateUpdater<D, any>>;
 
 type DispatchParams<D> = {
   initialState: D;

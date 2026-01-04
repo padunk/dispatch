@@ -7,3 +7,5 @@ $RECYCLE.BIN/
 coverage/
 
 ai-summary/
+
+examples/**/*/package-lock.json

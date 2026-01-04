@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dispatch Vanilla HTML</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <a href="https://github.com/padunk/dispatch" target="_blank">
+          <img src="/dispatchLogo.svg" class="logo" alt="Dispatch logo" />
+        </a>
+        <a
+          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+          target="_blank"
+        >
+          <img
+            src="/javascript.svg"
+            class="logo vanilla"
+            alt="JavaScript logo"
+          />
+        </a>
+        <h1>Hello Dispatcher!</h1>
+        <div class="card">
+          <p class="counter" id="count">1</p>
+          <button id="increment" type="button">Increment</button>
+          <button id="decrement" type="button">Decrement</button>
+        </div>
+        <p class="read-the-docs">Click on the Dispatch logo to learn more</p>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

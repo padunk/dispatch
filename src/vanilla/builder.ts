@@ -1,13 +1,5 @@
 import { z } from "zod";
-import { Draft } from "immer";
-import { Dispatch } from "./index";
-
-// Support both return-style and draft-style updates
-type StateUpdater<D, P = void> = P extends void
-  ? (state: D) => Partial<D> | void | ((draft: Draft<D>) => void)
-  : (state: D, payload: P) => Partial<D> | void | ((draft: Draft<D>) => void);
-
-type DispatchEvents<D> = Record<string, StateUpdater<D, any>>;
+import { Dispatch, DispatchEvents } from "./index";
 
 /**
  * Type-safe builder for creating Dispatch instances with validated event transitions
