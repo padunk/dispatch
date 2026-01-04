@@ -20,17 +20,6 @@ The key insight is that **you don't call event functions directly**. Instead:
 3. **Track the current event** - The library remembers which event was last triggered
 4. **Validate transitions** - Check if the next event is allowed based on `validNextEvents`
 
-### Why `send()` Instead of Direct Function Calls?
-
-```typescript
-// ❌ BAD: Direct function calls - no way to intercept or validate
-const { increment } = dispatch.getEvents();
-increment(state); // Can't track this!
-
-// ✅ GOOD: send() method - library can intercept, validate, and track
-dispatch.send("increment"); // Fully controlled by the library
-```
-
 ## Installation
 
 ```bash
@@ -40,7 +29,7 @@ npm install dispatch
 ## Basic Usage
 
 ```typescript
-import Dispatch from "./vanilla";
+import Dispatch from "@rusty-rush/Dispatch";
 
 const counter = new Dispatch({
   initialState: {
@@ -240,16 +229,15 @@ try {
 
 ## Comparison with XState
 
-| Feature             | Dispatch   | XState        |
-| ------------------- | ---------- | ------------- |
-| Size                | ~100 lines | Large (~50KB) |
-| Learning Curve      | Simple     | Steeper       |
-| State Machines      | ✅         | ✅            |
-| Hierarchical States | ❌         | ✅            |
-| Parallel States     | ❌         | ✅            |
-| State Charts        | ❌         | ✅            |
-| Actors              | ❌         | ✅            |
-| TypeScript          | ✅         | ✅            |
+| Feature             | Dispatch | XState  |
+| ------------------- | -------- | ------- |
+| Learning Curve      | Simple   | Steeper |
+| State Machines      | ✅       | ✅      |
+| Hierarchical States | ❌       | ✅      |
+| Parallel States     | ❌       | ✅      |
+| State Charts        | ❌       | ✅      |
+| Actors              | ❌       | ✅      |
+| TypeScript          | ✅       | ✅      |
 
 Use **Dispatch** for simple state machines. Use **XState** for complex state charts with hierarchical/parallel states.
 
