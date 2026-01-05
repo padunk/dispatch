@@ -8,6 +8,7 @@ import {
 import reactLogo from "./assets/react.svg";
 import dispatchLogo from "./assets/dispatch-logo.svg";
 import "./App.css";
+import Todo from "./todo-zod";
 
 type TrafficLight = {
   trafficLight: "red" | "yellow" | "green";
@@ -122,6 +123,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Dispatch and React logos to learn more
       </p>
+      <Todo />
     </>
   );
 }
