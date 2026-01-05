@@ -5,7 +5,7 @@ describe("Dispatch - Return-style updates", () => {
   let counter: Dispatch<{ count: number }>;
 
   beforeEach(() => {
-    counter = new Dispatch({
+    counter = new Dispatch<{ count: number }>({
       initialState: { count: 0 },
       events: {
         increment: (state: { count: number }) => ({ count: state.count + 1 }),
@@ -40,7 +40,7 @@ describe("Dispatch - Draft-style updates (Immer pattern)", () => {
   let todos: Dispatch<{ items: TodoItem[] }>;
 
   beforeEach(() => {
-    todos = new Dispatch({
+    todos = new Dispatch<{ items: TodoItem[] }>({
       initialState: { items: [] as TodoItem[] },
       events: {
         addItem: (draft, payload) => {
@@ -252,6 +252,7 @@ describe("Dispatch - Error handling", () => {
       },
     });
 
+    // @ts-expect-error - for testing
     expect(() => counter.dispatch("nonexistent")).toThrow(
       'Event "nonexistent" does not exist'
     );
@@ -270,6 +271,7 @@ describe("Dispatch - Error handling", () => {
       },
     });
 
+    // @ts-expect-error - for testing
     expect(() => counter.dispatch("nonexistent")).toThrow(
       'Event "nonexistent" does not exist'
     );

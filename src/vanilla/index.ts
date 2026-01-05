@@ -7,21 +7,28 @@ export type StateUpdater<D, P = void> = P extends void
 
 export type DispatchEvents<D> = Record<string, StateUpdater<D, any>>;
 
-type DispatchParams<D> = {
+type DispatchParams<D, E extends DispatchEvents<D>> = {
   initialState: D;
-  events: DispatchEvents<D>;
+  events: E;
   validNextEvents: Record<string, string[]>;
 };
 
-export class Dispatch<Data> {
+export class Dispatch<
+  Data,
+  Events extends DispatchEvents<Data> = DispatchEvents<Data>,
+> {
   #initialState: Data;
   #state: Data;
-  #events: DispatchEvents<Data>;
+  #events: Events;
   #validNextEvents: Record<string, string[]>;
-  #currentEvent: string | null;
+  #currentEvent: Extract<keyof Events, string> | null;
   #listeners: Set<(state: Data) => void>;
 
-  constructor({ initialState, events, validNextEvents }: DispatchParams<Data>) {
+  constructor({
+    initialState,
+    events,
+    validNextEvents,
+  }: DispatchParams<Data, Events>) {
     this.#initialState = produce(initialState, () => {});
     this.#state = produce(initialState, () => {});
 
@@ -35,7 +42,10 @@ export class Dispatch<Data> {
   }
 
   // Public API
-  dispatch(eventName: string, payload?: any): void {
+  dispatch<K extends Extract<keyof Events, string>>(
+    eventName: K,
+    payload?: any
+  ): void {
     // Validate event exists
     if (!this.#events[eventName]) {
       throw new Error(`Event "${eventName}" does not exist`);
@@ -77,7 +87,7 @@ export class Dispatch<Data> {
     });
 
     // Track current event
-    this.#currentEvent = eventName;
+    this.#currentEvent = eventName as Extract<keyof Events, string>;
 
     // Notify listeners
     this.#listeners.forEach((listener) => listener(this.#state));
@@ -92,7 +102,7 @@ export class Dispatch<Data> {
     return produce(this.#state, () => {});
   }
 
-  getCurrentEvent(): string | null {
+  getCurrentEvent(): Extract<keyof Events, string> | null {
     return this.#currentEvent;
   }
 

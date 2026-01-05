@@ -20,7 +20,10 @@ import type { Dispatch } from "../vanilla";
  * }
  * ```
  */
-export function useDispatch<T>(machine: Dispatch<T>): T {
+export function useDispatch<
+  T,
+  E extends Record<string, any> = Record<string, any>,
+>(machine: Dispatch<T, E>): T {
   return useSyncExternalStore(
     (callback) => machine.subscribe(callback),
     () => machine.getState(),
@@ -39,10 +42,11 @@ export function useDispatch<T>(machine: Dispatch<T>): T {
  * }
  * ```
  */
-export function useSelector<T, R>(
-  machine: Dispatch<T>,
-  selector: (state: T) => R
-): R {
+export function useSelector<
+  T,
+  E extends Record<string, any> = Record<string, any>,
+  R = any,
+>(machine: Dispatch<T, E>, selector: (state: T) => R): R {
   return useSyncExternalStore(
     (callback) => machine.subscribe(callback),
     () => selector(machine.getState()),
@@ -61,7 +65,10 @@ export function useSelector<T, R>(
  * }
  * ```
  */
-export function useCurrentEvent<T>(machine: Dispatch<T>): string | null {
+export function useCurrentEvent<
+  T,
+  E extends Record<string, any> = Record<string, any>,
+>(machine: Dispatch<T, E>): Extract<keyof E, string> | null {
   return useSyncExternalStore(
     (callback) => machine.subscribe(callback),
     () => machine.getCurrentEvent(),
@@ -84,7 +91,10 @@ export function useCurrentEvent<T>(machine: Dispatch<T>): string | null {
  * }
  * ```
  */
-export function useValidNextEvents<T>(machine: Dispatch<T>): string[] {
+export function useValidNextEvents<
+  T,
+  E extends Record<string, any> = Record<string, any>,
+>(machine: Dispatch<T, E>): Extract<keyof E, string>[] {
   return useSyncExternalStore(
     (callback) => machine.subscribe(callback),
     () => machine.getValidNextEvents().join(","), // Convert to string for stable reference
@@ -113,12 +123,22 @@ export function useValidNextEvents<T>(machine: Dispatch<T>): string[] {
  * }
  * ```
  */
-export function useMachine<T>(
-  machine: Dispatch<T>
-): [T, (eventName: string, payload?: any) => void, Dispatch<T>] {
+export function useMachine<
+  T,
+  E extends Record<string, any> = Record<string, any>,
+>(
+  machine: Dispatch<T, E>
+): [
+  T,
+  <K extends Extract<keyof E, string>>(eventName: K, payload?: any) => void,
+  Dispatch<T, E>,
+] {
   const state = useDispatch(machine);
 
-  const dispatch = (eventName: string, payload?: any) => {
+  const dispatch = <K extends Extract<keyof E, string>>(
+    eventName: K,
+    payload?: any
+  ) => {
     machine.dispatch(eventName, payload);
   };
 

@@ -4,12 +4,13 @@ A lightweight, **type-safe** state machine library for TypeScript. Get autocompl
 
 ## ✨ Features
 
-- 🔒 **Fully Type-Safe**: With Zod schema
+- 🔒 **Fully Type-Safe**: Event names, state, and payloads are all type-checked
 - 🎯 **IDE Autocomplete**: Your editor suggests valid event names
 - ✅ **Runtime Validation**: Catches invalid transitions and event references
 - 🔄 **Immutable Updates**: Powered by Immer for clean state updates
 - 🪝 **Simple API**: Easy to learn, powerful to use
 - 🎨 **Flexible Patterns**: Support for both return-style and draft-style updates
+- 📝 **Zod Integration**: Optional schema validation with Zod
 
 ## 📦 Installation
 
@@ -47,28 +48,6 @@ counter.subscribe((state) => {
 counter.dispatch("increment"); // ✅ count = 1
 counter.dispatch("increment"); // ✅ count = 2
 counter.dispatch("decrement"); // ✅ count = 1
-```
-
-## 🎯 Type Safety in Action
-
-### Autocomplete & Validation
-
-```typescript
-validNextEvents: {
-  increment: ["dec"], // ❌ TypeScript error!
-  //          ^^^^^
-  // Type '"dec"' is not assignable to type '"increment" | "decrement" | "reset"'
-}
-```
-
-### Runtime Safety
-
-```typescript
-try {
-  counter.dispatch("invalidEvent"); // ❌ Runtime error
-} catch (error) {
-  // Error: Event "invalidEvent" does not exist
-}
 ```
 
 ## 📚 API Reference
@@ -274,6 +253,37 @@ function FullCounter() {
 ```typescript
 machine.dispatch("nonexistent");
 // ❌ Error: Event "nonexistent" does not exist
+```
+
+## 🎯 Type Safety in Action
+
+### Event Name Autocomplete
+
+Event names are fully type-safe with IDE autocomplete:
+
+```typescript
+counter.dispatch("increment"); // ✅ Autocomplete suggests: "increment" | "decrement" | "reset"
+counter.dispatch("invalid"); // ❌ TypeScript error: Argument of type '"invalid"' is not assignable
+```
+
+### Validation in `validNextEvents`
+
+```typescript
+validNextEvents: {
+  increment: ["dec"], // ❌ TypeScript error!
+  //          ^^^^^
+  // Type '"dec"' is not assignable to type '"increment" | "decrement" | "reset"'
+}
+```
+
+### Runtime Safety
+
+```typescript
+try {
+  counter.dispatch("invalidEvent"); // ❌ Runtime error
+} catch (error) {
+  // Error: Event "invalidEvent" does not exist
+}
 ```
 
 ## 🆚 Why Not XState?

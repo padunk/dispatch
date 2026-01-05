@@ -31,7 +31,7 @@ export function createDispatch<
     [K in keyof Events]?: Array<Extract<keyof Events, string>>;
   };
   schema?: z.ZodSchema<Data>;
-}): Dispatch<Data> {
+}): Dispatch<Data, Events> {
   const { initialState, events, validNextEvents, schema } = config;
 
   // Validate initial state with Zod schema if provided
@@ -113,9 +113,9 @@ export function createValidatedDispatch<
   validNextEvents: {
     [K in keyof Events]?: Array<Extract<keyof Events, string>>;
   };
-}): Dispatch<Data> {
+}): Dispatch<Data, Events> {
   // Use any to bypass strict type checking during internal call
-  return createDispatch(config as any) as Dispatch<Data>;
+  return createDispatch(config as any) as Dispatch<Data, Events>;
 }
 
 export default createDispatch;
