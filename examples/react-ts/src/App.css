@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+button {
+  display: block;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -12,7 +16,7 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #444444aa);
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
@@ -37,6 +41,54 @@
   padding: 2em;
 }
 
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .read-the-docs {
   color: #888;
+}
+
+.traffic-light {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.light {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  transition: all 300ms;
+}
+
+.red {
+  background-color: red;
+  box-shadow: 0px 0px 20px 1px salmon;
+}
+
+.yellow {
+  background-color: gold;
+  box-shadow: 0px 0px 20px 1px yellow;
+}
+
+.green {
+  background-color: lime;
+  box-shadow: 0px 0px 20px 1px greenyellow;
+}
+
+.dim {
+  opacity: 0.2;
+  box-shadow: none;
+}
+
+.error-text {
+  color: crimson;
+  font-weight: 600;
 }

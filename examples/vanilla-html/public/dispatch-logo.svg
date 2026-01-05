@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" role="img" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="color-0">
+      <stop style="stop-color: #fdc830;" offset="0"/>
+      <stop style="stop-color: #f37335;" offset="1"/>
+    </linearGradient>
+  </defs>
+  <ellipse style="stroke: rgb(186, 155, 141); stroke-linecap: round; stroke-linejoin: round; stroke-width: 6px; fill-opacity: 0.78;" cx="249.855" cy="251.821" rx="88.04" ry="88.04"/>
+  <path style="fill: none; stroke: rgb(186, 155, 141); stroke-linecap: round; stroke-linejoin: round; stroke-width: 6px;" d="M 162.428 261.557 L 148.178 274.744 L 136.334 286.771 C 119.284 223.559 142.014 187.466 166.051 163.05 C 204.223 124.276 261.507 125.599 288.178 136.211 M 288.178 136.211 C 307.223 115.479 308.682 114.642 308.581 114.619 C 256.137 93.49 188.691 99.495 140.885 147.337 C 84.696 203.569 96.953 282.566 113.771 309.615"/>
+  <path style="fill: none; stroke: rgb(186, 155, 141); stroke-linejoin: round; transform-box: fill-box; transform-origin: 50% 50%; stroke-width: 6px; stroke-linecap: round;" d="M 255.632 353.096 L 241.382 366.283 L 229.538 378.31 C 212.488 315.098 235.218 279.005 259.255 254.589 C 297.427 215.815 354.711 217.138 381.382 227.75 M 381.382 227.75 C 400.427 207.018 401.886 206.181 401.785 206.158 C 349.341 185.029 281.895 191.034 234.089 238.876 C 177.9 295.108 190.157 374.105 206.975 401.154" transform="matrix(-1, 0, 0, -1, -0.000003, 0.000003)"/>
+  <ellipse style="stroke: rgb(186, 155, 141); stroke-linecap: round; stroke-linejoin: round; fill: none; stroke-width: 6px;" cx="-371.74" cy="-180.47" rx="19.525" ry="19.525" transform="matrix(-1, 0, 0, -1, 0, 0)"/>
+  <path style="stroke: rgb(0, 0, 0); stroke-linejoin: round; stroke-linecap: round; paint-order: fill; fill-rule: nonzero; fill: rgb(255, 255, 255);" d="M 221.667 264.821 C 221.667 257.737 221.667 200.191 221.667 200.191 L 259.077 200.191 C 281.473 200.191 281.473 215.126 281.473 222.709 C 281.473 229.501 281.473 269.947 281.473 279.922 C 281.473 285.001 281.473 300.122 259.077 300.122 C 253.454 300.122 221.667 300.122 221.667 300.122 L 221.667 269.947 L 236.653 269.947 L 236.653 285.001 L 259.077 285.001 C 264.648 284.492 266.601 281.01 266.608 277.526 C 266.778 269.304 266.608 232.386 266.608 222.709 C 266.608 218.165 262.659 215.126 259.077 215.126 L 236.653 215.126 C 236.653 224.249 236.653 259.732 236.653 264.821 L 221.667 264.821 Z"/>
+  <g>
+    <path style="fill: none; stroke: rgb(0, 231, 251); stroke-width: 6; stroke-linecap: round;" d="M 318.325 155.754 L 348.839 125.24"/>
+    <path style="fill: none; stroke: rgb(0, 231, 251); stroke-width: 6; stroke-linecap: round;" d="M 305.758 146.484 L 326.773 125.469"/>
+    <path style="fill: none; stroke: rgb(0, 231, 251); stroke-width: 6; stroke-linecap: round;" d="M 330.809 166.293 L 351.824 145.278"/>
+  </g>
+  <ellipse style="stroke: rgb(186, 155, 141); stroke-linecap: round; stroke-linejoin: round; fill: none; stroke-width: 6;" cx="-131.21" cy="-325.54" rx="19.525" ry="19.525" transform="matrix(-1, 0, 0, -1, 0, 0)"/>
+  <g transform="matrix(-1, 0, 0, -1, -160.137373, 216.445187)" style="transform-origin: 328.791px 145.766px;">
+    <path style="fill: none; stroke-width: 6; stroke-linecap: round; stroke: rgb(0, 126, 251);" d="M 318.325 155.754 L 348.839 125.24"/>
+    <path style="fill: none; stroke-width: 6; stroke-linecap: round; stroke: rgb(0, 126, 251);" d="M 305.758 146.484 L 326.773 125.469"/>
+    <path style="fill: none; stroke-width: 6; stroke-linecap: round; stroke: rgb(0, 126, 251);" d="M 330.809 166.293 L 351.824 145.278"/>
+  </g>
+</svg>
