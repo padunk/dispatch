@@ -1,4 +1,4 @@
-import { createDispatch } from "@rusty-rush/dispatch";
+import { createDispatch } from "@rustyrush/dispatch";
 
 const count = document.getElementById("count");
 const incrementButton = document.getElementById("increment");

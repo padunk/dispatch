@@ -1,6 +1,6 @@
 {
-  "name": "@abraham-agung/dispatch",
-  "version": "0.1.0",
+  "name": "@rustyrush/dispatch",
+  "version": "0.0.5-alpha",
   "description": "A lightweight TypeScript state machine library inspired by XState. Provides predictable state management with event-driven transitions and validation.",
   "type": "module",
   "keywords": [

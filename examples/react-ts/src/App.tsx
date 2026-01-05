@@ -1,16 +1,12 @@
 import reactLogo from "./assets/react.svg";
 import "./App.css";
-import {
-  createDispatch,
-  useDispatch,
-  type DispatchEvents,
-} from "@rusty-rush/dispatch";
+import { createDispatch, useDispatch } from "@rustyrush/dispatch";
 
 type Counter = {
   count: number;
 };
 
-const counter = createDispatch<Counter, DispatchEvents<Counter>>({
+const counter = createDispatch({
   initialState: { count: 0 },
   events: {
     increment: (state: Counter) => ({ count: state.count + 1 }),

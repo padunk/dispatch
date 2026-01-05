@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "use-sync-external-store/shim";
+import { useSyncExternalStore } from "react";
 import type { Dispatch } from "../vanilla";
 
 /**
@@ -94,7 +94,7 @@ export function useCurrentEvent<
 export function useValidNextEvents<
   T,
   E extends Record<string, any> = Record<string, any>,
->(machine: Dispatch<T, E>): Extract<keyof E, string>[] {
+>(machine: Dispatch<T, E>): string[] {
   return useSyncExternalStore(
     (callback) => machine.subscribe(callback),
     () => machine.getValidNextEvents().join(","), // Convert to string for stable reference
