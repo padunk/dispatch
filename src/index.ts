@@ -1,7 +1,7 @@
-// Type-safe builders (recommended API)
 export { createDispatch, createValidatedDispatch } from "./vanilla/builder";
 
 // Types
+export type { SchemaValidator, InferSchemaType } from "./vanilla/builder";
 export type { Dispatch, DispatchEvents, StateUpdater } from "./vanilla";
 
 // React hooks

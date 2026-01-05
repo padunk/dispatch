@@ -1,5 +1,20 @@
-import { z } from "zod";
 import { Dispatch, DispatchEvents } from "./index";
+
+/**
+ * Schema validator interface - structurally compatible with Zod and other validation libraries
+ */
+export interface SchemaValidator<T> {
+  safeParse(
+    data: unknown
+  ):
+    | { success: true; data: T }
+    | { success: false; error: { message: string } };
+}
+
+/**
+ * Type helper to infer the output type from a schema validator
+ */
+export type InferSchemaType<S> = S extends SchemaValidator<infer T> ? T : never;
 
 /**
  * Type-safe builder for creating Dispatch instances with validated event transitions
@@ -30,7 +45,7 @@ export function createDispatch<
   validNextEvents: {
     [K in keyof Events]?: Array<Extract<keyof Events, string>>;
   };
-  schema?: z.ZodSchema<Data>;
+  schema?: SchemaValidator<Data>;
 }): Dispatch<Data, Events> {
   const { initialState, events, validNextEvents, schema } = config;
 
@@ -103,9 +118,9 @@ export function createDispatch<
  * ```
  */
 export function createValidatedDispatch<
-  Data extends z.infer<Schema>,
-  Schema extends z.ZodSchema,
-  Events extends DispatchEvents<Data>,
+  Schema extends SchemaValidator<any>,
+  Data extends InferSchemaType<Schema> = InferSchemaType<Schema>,
+  Events extends DispatchEvents<Data> = DispatchEvents<Data>,
 >(config: {
   schema: Schema;
   initialState: Data;
@@ -114,8 +129,7 @@ export function createValidatedDispatch<
     [K in keyof Events]?: Array<Extract<keyof Events, string>>;
   };
 }): Dispatch<Data, Events> {
-  // Use any to bypass strict type checking during internal call
-  return createDispatch(config as any) as Dispatch<Data, Events>;
+  return createDispatch(config);
 }
 
 export default createDispatch;
