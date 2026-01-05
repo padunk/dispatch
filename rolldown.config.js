@@ -7,5 +7,5 @@ export default defineConfig({
     format: "esm",
     sourcemap: true,
   },
-  external: ["react", "react-dom"],
+  external: ["immer", "react", "react-dom", "zod"],
 });

@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@rustyrush/dispatch": "file:../.."
+    "@rustyrush/dispatch": "0.0.6"
   },
   "devDependencies": {
     "vite": "^7.2.4"
