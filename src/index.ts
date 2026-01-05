@@ -2,7 +2,7 @@
 export { createDispatch, createValidatedDispatch } from "./vanilla/builder";
 
 // Types
-export type { Dispatch } from "./vanilla";
+export type { Dispatch, DispatchEvents, StateUpdater } from "./vanilla";
 
 // React hooks
 export {

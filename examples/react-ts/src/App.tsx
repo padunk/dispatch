@@ -1,13 +1,16 @@
 import * as React from "react";
-import { createDispatch, useDispatch } from "@rustyrush/dispatch";
+import {
+  createDispatch,
+  useDispatch,
+  type DispatchEvents,
+} from "@rustyrush/dispatch";
 
 import reactLogo from "./assets/react.svg";
 import dispatchLogo from "./assets/dispatch-logo.svg";
 import "./App.css";
-import type { DispatchEvents } from "../../../dist/vanilla";
 
 type TrafficLight = {
-  trafficLight: string;
+  trafficLight: "red" | "yellow" | "green";
 };
 
 const trafficLightAdmin = createDispatch<
@@ -16,9 +19,9 @@ const trafficLightAdmin = createDispatch<
 >({
   initialState: { trafficLight: "red" },
   events: {
-    toRed: () => ({ trafficLight: "red" }),
-    toYellow: () => ({ trafficLight: "yellow" }),
-    toGreen: () => ({ trafficLight: "green" }),
+    toRed: () => ({ trafficLight: "red" as const }),
+    toYellow: () => ({ trafficLight: "yellow" as const }),
+    toGreen: () => ({ trafficLight: "green" as const }),
   },
   validNextEvents: {
     toRed: ["toYellow"],
