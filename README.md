@@ -251,8 +251,11 @@ function FullCounter() {
 ### Invalid Event
 
 ```typescript
-machine.dispatch("nonexistent");
-// ❌ Error: Event "nonexistent" does not exist
+try {
+  machine.dispatch("nonexistent");
+} catch (error) {
+  // ❌ Error: Event "nonexistent" does not exist
+}
 ```
 
 ## 🎯 Type Safety in Action
@@ -288,9 +291,10 @@ try {
 
 ## 🆚 Why Not XState?
 
+<!-- | **Bundle Size**     | ~5KB        | ~20KB      | -->
+
 | Feature             | Dispatch    | XState     |
 | ------------------- | ----------- | ---------- |
-| **Bundle Size**     | ~5KB        | ~20KB      |
 | **Learning Curve**  | Simple      | Steeper    |
 | **Type Safety**     | ✅ Built-in | ⚠️ Complex |
 | **Zod Integration** | ✅ Native   | ❌         |
