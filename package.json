@@ -1,6 +1,6 @@
 {
   "name": "@rustyrush/dispatch",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A lightweight TypeScript state machine library inspired by XState. Provides predictable state management with event-driven transitions and validation.",
   "type": "module",
   "keywords": [
@@ -30,8 +30,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "npm run build:rolldown && npm run build:types",
-    "build:rolldown": "rolldown -c",
+    "build": "bun run build:base && bun run build:types",
     "build:types": "tsc --emitDeclarationOnly",
     "build:base": "rolldown -c",
     "test": "bun run test:format && bun run test:types && bun run test:lint && bun run test:spec",
@@ -39,7 +38,7 @@
     "test:types": "tsc --noEmit",
     "test:lint": "eslint .",
     "test:spec": "vitest run",
-    "prepublishOnly": "npm run build && npm test"
+    "prepublishOnly": "bun run build && bun test"
   },
   "repository": {
     "type": "git",
@@ -93,5 +92,8 @@
     "typescript-eslint": "^8.51.0",
     "vite": "^7.3.0",
     "vitest": "^4.0.16"
+  },
+  "directories": {
+    "example": "examples"
   }
 }

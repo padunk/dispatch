@@ -1,6 +1,6 @@
 # Dispatch - Type-Safe State Machines
 
-A lightweight, **type-safe** state machine library for TypeScript. Get autocomplete for events, runtime validation, and optional Zod schema validation.
+A lightweight, **type-safe** state machine library for TypeScript. Get autocomplete for events, runtime validation, and optional schema validation.
 
 ## ✨ Features
 
@@ -10,7 +10,6 @@ A lightweight, **type-safe** state machine library for TypeScript. Get autocompl
 - 🔄 **Immutable Updates**: Powered by Immer for clean state updates
 - 🪝 **Simple API**: Easy to learn, powerful to use
 - 🎨 **Flexible Patterns**: Support for both return-style and draft-style updates
-- 📝 **Zod Integration**: Optional schema validation with Zod
 
 ## 📦 Installation
 
@@ -23,7 +22,7 @@ bun add dispatch
 ## 🚀 Quick Start
 
 ```typescript
-import { createDispatch } from "dispatch";
+import { createDispatch } from 'dispatch'
 
 const counter = createDispatch({
   initialState: { count: 0 },
@@ -33,21 +32,21 @@ const counter = createDispatch({
     reset: () => ({ count: 0 }),
   },
   validNextEvents: {
-    increment: ["increment", "decrement", "reset"],
-    decrement: ["increment", "decrement", "reset"],
-    reset: ["increment"],
+    increment: ['increment', 'decrement', 'reset'],
+    decrement: ['increment', 'decrement', 'reset'],
+    reset: ['increment'],
   },
-});
+})
 
 // Subscribe to state changes
 counter.subscribe((state) => {
-  console.log("Count:", state.count);
-});
+  console.log('Count:', state.count)
+})
 
 // Dispatch events
-counter.dispatch("increment"); // ✅ count = 1
-counter.dispatch("increment"); // ✅ count = 2
-counter.dispatch("decrement"); // ✅ count = 1
+counter.dispatch('increment') // ✅ count = 1
+counter.dispatch('increment') // ✅ count = 2
+counter.dispatch('decrement') // ✅ count = 1
 ```
 
 ## 📚 API Reference
@@ -74,8 +73,8 @@ const machine = createDispatch({
 Trigger a state transition.
 
 ```typescript
-machine.dispatch("increment");
-machine.dispatch("setValue", { value: 42 });
+machine.dispatch('increment')
+machine.dispatch('setValue', { value: 42 })
 ```
 
 ### `subscribe(listener)`
@@ -84,10 +83,10 @@ Listen to state changes. Returns unsubscribe function.
 
 ```typescript
 const unsubscribe = machine.subscribe((state) => {
-  console.log(state);
-});
+  console.log(state)
+})
 
-unsubscribe(); // Stop listening
+unsubscribe() // Stop listening
 ```
 
 #### `getState(): State`
@@ -95,8 +94,8 @@ unsubscribe(); // Stop listening
 Get the current state (returns a copy).
 
 ```typescript
-const state = dispatch.getState();
-console.log(state.count);
+const state = dispatch.getState()
+console.log(state.count)
 ```
 
 #### `getCurrentEvent(): string | null`
@@ -104,8 +103,8 @@ console.log(state.count);
 Get the name of the last event that was dispatched.
 
 ```typescript
-dispatch.send("increment");
-console.log(dispatch.getCurrentEvent()); // "increment"
+dispatch.send('increment')
+console.log(dispatch.getCurrentEvent()) // "increment"
 ```
 
 #### `getValidNextEvents(): string[]`
@@ -113,8 +112,8 @@ console.log(dispatch.getCurrentEvent()); // "increment"
 Get the list of valid events that can be dispatched next.
 
 ```typescript
-dispatch.send("increment");
-console.log(dispatch.getValidNextEvents()); // ["increment", "decrement"]
+dispatch.send('increment')
+console.log(dispatch.getValidNextEvents()) // ["increment", "decrement"]
 ```
 
 #### `resetState(): void`
@@ -122,7 +121,7 @@ console.log(dispatch.getValidNextEvents()); // ["increment", "decrement"]
 Reset the state back to the initial state and clear the current event.
 
 ```typescript
-dispatch.resetState();
+dispatch.resetState()
 ```
 
 ## 🛡️ Zod Schema Validation
@@ -130,33 +129,33 @@ dispatch.resetState();
 Validate your state shape at runtime:
 
 ```typescript
-import { z } from "zod";
-import { createValidatedDispatch } from "dispatch";
+import { z } from 'zod'
+import { createValidatedDispatch } from 'dispatch'
 
 const UserSchema = z.object({
   name: z.string().min(1),
   age: z.number().min(0).max(150),
   email: z.string().email(),
-});
+})
 
-type User = z.infer<typeof UserSchema>;
+type User = z.infer<typeof UserSchema>
 
 const user = createValidatedDispatch({
   schema: UserSchema,
   initialState: {
-    name: "John",
+    name: 'John',
     age: 30,
-    email: "john@example.com",
+    email: 'john@example.com',
   } as User,
   events: {
     updateName: (state: User, name: string) => ({ name }),
     updateAge: (state: User, age: number) => ({ age }),
   },
   validNextEvents: {
-    updateName: ["updateAge"],
-    updateAge: ["updateName"],
+    updateName: ['updateAge'],
+    updateAge: ['updateName'],
   },
-});
+})
 ```
 
 ### Draft-Style Updates (Immer)
@@ -170,18 +169,18 @@ const todos = createDispatch({
   },
   events: {
     addTodo: (draft, text: string) => {
-      draft.items.push({ id: Date.now(), text, done: false });
+      draft.items.push({ id: Date.now(), text, done: false })
     },
     toggleTodo: (draft, id: number) => {
-      const todo = draft.items.find((t) => t.id === id);
-      if (todo) todo.done = !todo.done;
+      const todo = draft.items.find((t) => t.id === id)
+      if (todo) todo.done = !todo.done
     },
   },
   validNextEvents: {
-    addTodo: ["addTodo", "toggleTodo"],
-    toggleTodo: ["addTodo", "toggleTodo"],
+    addTodo: ['addTodo', 'toggleTodo'],
+    toggleTodo: ['addTodo', 'toggleTodo'],
   },
-});
+})
 ```
 
 ## 💡 Patterns
@@ -252,7 +251,7 @@ function FullCounter() {
 
 ```typescript
 try {
-  machine.dispatch("nonexistent");
+  machine.dispatch('nonexistent')
 } catch (error) {
   // ❌ Error: Event "nonexistent" does not exist
 }
@@ -265,8 +264,8 @@ try {
 Event names are fully type-safe with IDE autocomplete:
 
 ```typescript
-counter.dispatch("increment"); // ✅ Autocomplete suggests: "increment" | "decrement" | "reset"
-counter.dispatch("invalid"); // ❌ TypeScript error: Argument of type '"invalid"' is not assignable
+counter.dispatch('increment') // ✅ Autocomplete suggests: "increment" | "decrement" | "reset"
+counter.dispatch('invalid') // ❌ TypeScript error: Argument of type '"invalid"' is not assignable
 ```
 
 ### Validation in `validNextEvents`
@@ -283,7 +282,7 @@ validNextEvents: {
 
 ```typescript
 try {
-  counter.dispatch("invalidEvent"); // ❌ Runtime error
+  counter.dispatch('invalidEvent') // ❌ Runtime error
 } catch (error) {
   // Error: Event "invalidEvent" does not exist
 }
@@ -291,19 +290,17 @@ try {
 
 ## 🆚 Why Not XState?
 
-<!-- | **Bundle Size**     | ~5KB        | ~20KB      | -->
-
 | Feature             | Dispatch    | XState     |
 | ------------------- | ----------- | ---------- |
 | **Learning Curve**  | Simple      | Steeper    |
 | **Type Safety**     | ✅ Built-in | ⚠️ Complex |
-| **Zod Integration** | ✅ Native   | ❌         |
+| **Object Schema**   | ✅          | ❌         |
 | **State Machines**  | ✅          | ✅         |
 | **Hierarchical**    | ❌          | ✅         |
 | **Parallel States** | ❌          | ✅         |
 | **Actors**          | ❌          | ✅         |
 
-**Choose Dispatch** for simple, type-safe state machines with great DX.  
+**Choose Dispatch** for simple, type-safe state machines with simple DX.  
 **Choose XState** for complex hierarchical/parallel state charts.
 
 ## 📖 Learn More
