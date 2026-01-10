@@ -35,6 +35,7 @@
     "build:base": "rolldown -c",
     "test": "bun run test:format && bun run test:types && bun run test:lint && bun run test:spec",
     "test:format": "prettier . --list-different",
+    "format": "prettier . --write",
     "test:types": "tsc --noEmit",
     "test:lint": "eslint .",
     "test:spec": "vitest run",
