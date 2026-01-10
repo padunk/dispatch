@@ -254,7 +254,7 @@ describe("Dispatch - Error handling", () => {
 
     // @ts-expect-error - for testing
     expect(() => counter.dispatch("nonexistent")).toThrow(
-      'Event "nonexistent" does not exist'
+      'Event "nonexistent" does not exist',
     );
   });
 
@@ -273,7 +273,7 @@ describe("Dispatch - Error handling", () => {
 
     // @ts-expect-error - for testing
     expect(() => counter.dispatch("nonexistent")).toThrow(
-      'Event "nonexistent" does not exist'
+      'Event "nonexistent" does not exist',
     );
 
     counter.dispatch("increment");
@@ -303,7 +303,7 @@ describe("Dispatch - Error handling", () => {
 
     counter.dispatch("increment");
     expect(() => counter.dispatch("decrement")).toThrow(
-      'Cannot transition from "increment" to "decrement"'
+      'Cannot transition from "increment" to "decrement"',
     );
   });
 });

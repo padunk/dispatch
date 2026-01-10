@@ -49,7 +49,7 @@ const authMachine = createDispatch({
 
 authMachine.subscribe((state) => {
   console.log(
-    `  Status: ${state.status}, User: ${state.user}, Error: ${state.error}`
+    `  Status: ${state.status}, User: ${state.user}, Error: ${state.error}`,
   );
 });
 

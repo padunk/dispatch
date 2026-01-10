@@ -127,7 +127,7 @@ todos.subscribe((state) => {
   console.log(
     `  Todos (${state.filter}): ${state.items.length} items, ${
       state.items.filter((t) => t.completed).length
-    } completed`
+    } completed`,
   );
 });
 

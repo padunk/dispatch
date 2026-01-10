@@ -90,7 +90,7 @@ describe("React Hooks - useSelector", () => {
     });
 
     const { result } = renderHook(() =>
-      useSelector(user, (state) => `${state.firstName} ${state.lastName}`)
+      useSelector(user, (state) => `${state.firstName} ${state.lastName}`),
     );
 
     expect(result.current).toBe("John Doe");
@@ -111,7 +111,7 @@ describe("React Hooks - useSelector", () => {
     });
 
     const { result } = renderHook(() =>
-      useSelector(user, (state) => state.firstName)
+      useSelector(user, (state) => state.firstName),
     );
 
     expect(result.current).toBe("John");
@@ -376,7 +376,7 @@ describe("React Hooks - Complex scenarios", () => {
     const hook1 = renderHook(() => useDispatch(counter));
     const hook2 = renderHook(() => useDispatch(counter));
     const hook3 = renderHook(() =>
-      useSelector(counter, (state) => state.count * 2)
+      useSelector(counter, (state) => state.count * 2),
     );
 
     expect(hook1.result.current.count).toBe(0);

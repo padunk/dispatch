@@ -72,7 +72,7 @@ function UserProfile() {
   // Only re-renders when fullName changes
   const fullName = useSelector(
     userMachine,
-    (state) => `${state.firstName} ${state.lastName}`
+    (state) => `${state.firstName} ${state.lastName}`,
   );
   const age = useSelector(userMachine, (state) => state.age);
 

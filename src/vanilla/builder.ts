@@ -5,7 +5,7 @@ import { Dispatch, DispatchEvents } from "./index";
  */
 export interface SchemaValidator<T> {
   safeParse(
-    data: unknown
+    data: unknown,
   ):
     | { success: true; data: T }
     | { success: false; error: { message: string } };
@@ -54,7 +54,7 @@ export function createDispatch<
     const result = schema.safeParse(initialState);
     if (!result.success) {
       throw new Error(
-        `Initial state validation failed: ${result.error.message}`
+        `Initial state validation failed: ${result.error.message}`,
       );
     }
   }
@@ -65,8 +65,8 @@ export function createDispatch<
     if (!eventNames.includes(event)) {
       throw new Error(
         `validNextEvents references unknown event: "${event}". Available events: ${eventNames.join(
-          ", "
-        )}`
+          ", ",
+        )}`,
       );
     }
     if (Array.isArray(nextEvents)) {
@@ -74,8 +74,8 @@ export function createDispatch<
         if (!eventNames.includes(nextEvent)) {
           throw new Error(
             `validNextEvents["${event}"] references unknown event: "${nextEvent}". Available events: ${eventNames.join(
-              ", "
-            )}`
+              ", ",
+            )}`,
           );
         }
       }
