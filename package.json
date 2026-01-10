@@ -38,7 +38,7 @@
     "test:types": "tsc --noEmit",
     "test:lint": "eslint .",
     "test:spec": "vitest run",
-    "prepublishOnly": "bun run build && bun test"
+    "prepublishOnly": "bun run build && bun run test"
   },
   "repository": {
     "type": "git",
