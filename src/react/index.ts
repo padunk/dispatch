@@ -27,7 +27,7 @@ export function useDispatch<
   return useSyncExternalStore(
     (callback) => machine.subscribe(callback),
     () => machine.getState(),
-    () => machine.getState() // Server-side rendering support
+    () => machine.getState(), // Server-side rendering support
   );
 }
 
@@ -50,7 +50,7 @@ export function useSelector<
   return useSyncExternalStore(
     (callback) => machine.subscribe(callback),
     () => selector(machine.getState()),
-    () => selector(machine.getState()) // Server-side rendering support
+    () => selector(machine.getState()), // Server-side rendering support
   );
 }
 
@@ -72,7 +72,7 @@ export function useCurrentEvent<
   return useSyncExternalStore(
     (callback) => machine.subscribe(callback),
     () => machine.getCurrentEvent(),
-    () => machine.getCurrentEvent()
+    () => machine.getCurrentEvent(),
   );
 }
 
@@ -97,11 +97,9 @@ export function useValidNextEvents<
 >(machine: Dispatch<T, E>): string[] {
   return useSyncExternalStore(
     (callback) => machine.subscribe(callback),
-    () => machine.getValidNextEvents().join(","), // Convert to string for stable reference
-    () => machine.getValidNextEvents().join(",")
-  )
-    .split(",")
-    .filter(Boolean); // Convert back to array, filtering empty strings
+    () => machine.getValidNextEvents(),
+    () => machine.getValidNextEvents(),
+  );
 }
 
 /**
@@ -127,7 +125,7 @@ export function useMachine<
   T,
   E extends Record<string, any> = Record<string, any>,
 >(
-  machine: Dispatch<T, E>
+  machine: Dispatch<T, E>,
 ): [
   T,
   <K extends Extract<keyof E, string>>(eventName: K, payload?: any) => void,
@@ -137,7 +135,7 @@ export function useMachine<
 
   const dispatch = <K extends Extract<keyof E, string>>(
     eventName: K,
-    payload?: any
+    payload?: any,
   ) => {
     machine.dispatch(eventName, payload);
   };

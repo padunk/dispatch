@@ -23,6 +23,7 @@ export class Dispatch<
   #validNextEvents: Record<string, string[]>;
   #currentEvent: Extract<keyof Events, string> | null;
   #listeners: Set<(state: Data) => void>;
+  #allEvents: string[];
 
   constructor({
     initialState,
@@ -36,6 +37,7 @@ export class Dispatch<
     this.#events = events;
     this.#validNextEvents = validNextEvents;
     this.#currentEvent = null;
+    this.#allEvents = Object.keys(events);
 
     // listeners
     this.#listeners = new Set();
@@ -44,7 +46,7 @@ export class Dispatch<
   // Public API
   dispatch<K extends Extract<keyof Events, string>>(
     eventName: K,
-    payload?: any
+    payload?: any,
   ): void {
     // Validate event exists
     if (!this.#events[eventName]) {
@@ -65,7 +67,7 @@ export class Dispatch<
             this.#currentEvent
           }" to "${eventName}". Valid next events: ${
             validNext?.join(", ") || "none"
-          }`
+          }`,
         );
       }
     }
@@ -109,7 +111,7 @@ export class Dispatch<
   getValidNextEvents(): string[] {
     if (this.#currentEvent === null) {
       // At the start, all events are valid
-      return Object.keys(this.#events);
+      return this.#allEvents;
     }
     return this.#validNextEvents[this.#currentEvent] || [];
   }
